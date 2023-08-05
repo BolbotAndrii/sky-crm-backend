@@ -1,5 +1,7 @@
-import {Router} from "express"
+import {Router } from 'express';
+
 import {getUsersList}  from '../controller/usersController.js'
+
 
 const router = Router()
 
@@ -8,5 +10,4 @@ router.get(
     getUsersList
 )
 
-
-module.exports = router
+export default router;

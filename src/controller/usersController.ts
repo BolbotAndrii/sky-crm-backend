@@ -1,4 +1,4 @@
-const {usersList} = require('../services/usersService.js')
+import {usersList} from '../services/usersService.js'
 export const getUsersList  = async (req:any, res:any) => {
     try {
         const result = await usersList(req)
@@ -8,4 +8,3 @@ export const getUsersList  = async (req:any, res:any) => {
     }
 }
 
-// module.exports = {getUsersList}

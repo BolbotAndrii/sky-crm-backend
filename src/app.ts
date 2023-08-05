@@ -1,8 +1,9 @@
-require("dotenv").config();
-const express = require('express')
-const bodyParser = require("body-parser");
-const mongo = require("mongoose");
-const cors = require("cors");
+import dotenv from 'dotenv';
+dotenv.config()
+import express from 'express'
+import bodyParser from "body-parser"
+import mongo from "mongoose"
+import cors from "cors"
 
 const app = express();
 
@@ -11,6 +12,8 @@ app.use(cors())
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+
+app.use('/api/v1/users', require('./routes/usersRoutes.js'))
 const start = async () => {
     const PORT = process.env.PORT || 6000;
 
@@ -20,8 +23,8 @@ const start = async () => {
             useUnifiedTopology: true,
         });
 
-        app.listen(PORT, () => console.log(`Started at port ${PORT}`));
-    } catch (e) {
+        app.listen(PORT, () => console.log(`⚡️ Started at port ${PORT}`));
+    } catch (e:any) {
         console.log("Server Error", e.message);
         process.exit(1);
     }

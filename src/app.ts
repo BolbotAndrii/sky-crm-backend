@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config()
+dotenv.config();
 import express from 'express'
 import bodyParser from "body-parser"
 import mongoose, { ConnectOptions } from "mongoose";
@@ -18,10 +18,12 @@ const start = async () => {
     const PORT = process.env.PORT || 6000;
 
     try {
-        await mongoose.connect('mongodb+srv://skyrocket:pWzcc4QI1Mi5ZOnQ@skyrocket.xsg4k5u.mongodb.net/skyrocket?retryWrites=true&w=majority', {
+        // console.log(process.env)
+        await mongoose.connect(process.env.MONGO_URI || '', {
             useNewUrlParser: true,
             useUnifiedTopology: true
         } as ConnectOptions);
+
 
         app.listen(PORT, () => console.log(`⚡️ Started at port ${PORT}`));
     } catch (e:any) {
@@ -29,5 +31,6 @@ const start = async () => {
         process.exit(1);
     }
 }
+
 
 start()

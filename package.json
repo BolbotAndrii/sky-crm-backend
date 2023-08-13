@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "ts-node src/app.ts",
-    "server": "nodemon src/app.ts",
+    "server": "nodemon --exec ts-node src/app.ts",
     "client": "npm run start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
   },

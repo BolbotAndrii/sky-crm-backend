@@ -9,7 +9,7 @@ const userSchema = new Schema<IUser>({
     email: { type: String, required: false, unique: true },
     password: { type: String, required: false },
     user_logo: { type: String, required: false, default: "" },
-    active: { type: Boolean, default: true },
+    active: { type: Boolean, required: false, default: true },
     role_id: { type: Number, required: true, default: 6 },
     role_name: { type: String, required: true, default: "AGENT" },
     background_color: { type: String, required: false, default: "#626ed4" },
@@ -17,12 +17,12 @@ const userSchema = new Schema<IUser>({
     address: { type: String, default: "", required: false },
     user_identifier: { type: String, default: "AM", required: true },
     permissions: {
-        leads: { type: Boolean, default: true },
-        deposits: { type: Boolean, default: true },
-        analytics: { type: Boolean, default: true },
-        settings: { type: Boolean, default: true },
-        offices: { type: Boolean, default: true },
-        dashboard: { type: Boolean, default: true },
+        leads: { type: Boolean, required: false, default: true },
+        deposits: { type: Boolean, required: false, default: true },
+        analytics: { type: Boolean, required: false, default: true },
+        settings: { type: Boolean, required: false, default: true },
+        offices: { type: Boolean, required: false, default: true },
+        dashboard: { type: Boolean, required: false, default: true },
     }
 }, {
     timestamps: {

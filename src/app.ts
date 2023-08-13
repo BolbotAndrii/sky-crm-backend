@@ -5,7 +5,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import mongoose, { ConnectOptions } from 'mongoose'
 import cors from 'cors'
-import usersRoutes from './modules/routes/usersRoutes.js'
+import usersRoutes from './routes/usersRoutes.js'
 
 const app = express()
 

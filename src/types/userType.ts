@@ -1,12 +1,3 @@
-export interface IPermissions {
-  leads: boolean
-  deposits: boolean
-  analytics: boolean
-  settings: boolean
-  offices: boolean
-  dashboard: boolean
-}
-
 export interface IUser {
   full_name: string
   title: string
@@ -21,5 +12,5 @@ export interface IUser {
   notes: string
   address: string
   user_identifier: string
-  permissions: IPermissions
+  permissions: object
 }

@@ -2,7 +2,7 @@
   "name": "crm-server",
   "version": "1.0.0",
   "description": "crm server",
-  "main": "src/app.ts",
+  "main": "index.ts",
   "type": "module",
   "husky": {
     "hooks": {
@@ -16,7 +16,7 @@
     "format": "npx eslint ./src --fix",
     "client": "npm run start --prefix client",
     "server": "npx nodemon",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "npm run server"
   },
   "repository": {
     "type": "git",
@@ -34,12 +34,17 @@
   },
   "homepage": "https://github.com/BolbotAndrii/sky-crm-backend#readme",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/body-parser": "^1.19.2",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^20.4.8",
-    "@typescript-eslint/eslint-plugin": "^6.3.0",
+    "@types/nodemailer": "^6.4.9",
+    "@types/passport": "^1.0.12",
+    "@types/passport-jwt": "^3.0.9",
+    "@types/validator": "^13.11.1",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.3.0",
     "eslint": "^8.47.0",
     "husky": "^8.0.3",
@@ -49,12 +54,23 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
     "concurrently": "^8.2.0",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "http-status": "^1.6.2",
+    "joi": "^17.9.2",
+    "jsonwebtoken": "^9.0.1",
+    "logger": "0.0.1",
+    "moment": "^2.29.4",
     "mongoose": "^7.4.2",
-    "nodemon": "^3.0.1"
+    "nodemailer": "^6.9.4",
+    "nodemon": "^3.0.1",
+    "passport": "^0.6.0",
+    "passport-jwt": "^4.0.1",
+    "validator": "^13.11.0",
+    "winston": "^3.10.0"
   }
 }

@@ -19,7 +19,7 @@ enum UserRoutes {
 user_router.post(
   UserRoutes.CREATE,
   // auth(Actions.CREATE_USER),
-  // validate(createUser),
+  validate(createUser),
   catchAsync(userController.createUser),
 )
 //@ts-ignore

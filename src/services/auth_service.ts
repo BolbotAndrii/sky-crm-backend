@@ -8,6 +8,7 @@ import { tokenModel as Token } from '../models/token_model.js'
 
 const loginUserWithEmailAndPassword = async (email: string, password: string): Promise<Document> => {
   const user = await userService.getUserByEmail(email)
+
   if (!user || !(await user.isPasswordMatch(password))) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Incorrect email or password')
   }
@@ -20,10 +21,11 @@ const logout = async (refreshToken: string): Promise<void> => {
     type: tokenTypes.REFRESH,
     blacklisted: false,
   })
+
   if (!refreshTokenDoc) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Not found')
   }
-  await refreshTokenDoc.remove()
+  await refreshTokenDoc.deleteOne()
 }
 
 const refreshAuth = async (
@@ -35,7 +37,7 @@ const refreshAuth = async (
     if (!user) {
       throw new Error()
     }
-    await refreshTokenDoc.remove()
+    await refreshTokenDoc.deleteOne()
     return tokenService.generateAuthTokens(user)
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate')

@@ -11,11 +11,14 @@ interface PaginationOptions {
   populate?: string
 }
 
-const createUser = async (userBody: any) => {
+const createUser = async (userBody: IUser) => {
   if (await User.isEmailTaken(userBody?.email)) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken')
   }
-  return User.create(userBody)
+
+  const passwordHash = await User.brcPassHash(userBody.password)
+
+  return User.create({ ...userBody, password: passwordHash })
 }
 
 const queryUsers = async (filter: FilterQuery<IUser>, options: PaginationOptions) => {

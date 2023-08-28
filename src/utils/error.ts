@@ -40,4 +40,8 @@ const errorHandler = (err, req, res, next) => {
   res.status(statusCode).send(response)
 }
 
-export { errorConverter, errorHandler }
+const errorNotFound = (req, res, next) => {
+  return next(new ApiError(httpStatus.NOT_FOUND, 'Not found'))
+}
+
+export { errorConverter, errorHandler, errorNotFound }

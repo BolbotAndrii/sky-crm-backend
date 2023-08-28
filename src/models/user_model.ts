@@ -1,6 +1,7 @@
 import { Schema, model, Model, Document } from 'mongoose'
 import validator from 'validator'
 import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 import { ROLES } from '../constants/roles.js'
 import { IUser } from '../types/User.js'
 import { paginate } from '../plugin/paginate.js'
@@ -44,6 +45,14 @@ const userSchema = new Schema<IUser>(
 userSchema.statics.isEmailTaken = async function (email: string, excludeUserId: string): Promise<boolean> {
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } })
   return !!user
+}
+
+userSchema.statics.brcPassHash = async function (password: string): Promise<string> {
+  return bcrypt.hash(password, 3)
+}
+
+userSchema.statics.verifyToken = async function (token: string): Promise<boolean> {
+  return jwt.verify(token, process.env.JWT_SECRET)
 }
 
 userSchema.methods.isPasswordMatch = async function (password: string): Promise<boolean> {

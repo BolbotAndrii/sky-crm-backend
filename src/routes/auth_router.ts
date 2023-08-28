@@ -8,4 +8,4 @@ import * as authController from '../controller/auth_controller.js'
 export const auth_router = Router()
 
 auth_router.post('/login', validate(login), catchAsync(authController.login))
-auth_router.post('/logout', auth([]), validate(logout), catchAsync(authController.logout))
+auth_router.post('/logout', auth(), validate(logout), catchAsync(authController.logout))

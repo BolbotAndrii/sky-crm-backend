@@ -12,4 +12,11 @@ export interface IUser {
   notes: string
   address: string
   user_identifier: string
+  modules: {
+    users: boolean
+    dashboard: boolean
+    leads: boolean
+    trash: boolean
+    offices: boolean
+  }
 }

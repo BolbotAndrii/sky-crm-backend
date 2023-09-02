@@ -10,14 +10,16 @@ const createUser = async (req: Request, res: Response) => {
 }
 
 const getUsers = async (req: Request, res: Response) => {
-  const filter = pick(req.query, ['name', 'role'])
-  const options = pick(req.query, ['sortBy', 'limit', 'page'])
+  const filter = pick(req.query, ['first_name', 'role_id'])
+  const options = pick(req.query, ['order', 'sort_field', 'per_page', 'page'])
+
   const result = await userService.queryUsers(filter, options)
   res.send(result)
 }
 
 const getUser = async (req: Request, res: Response) => {
-  const user = await userService.getUserById(req.params.userId)
+  const id = req.query.userId
+  const user = await userService.getUserById(id)
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
   }

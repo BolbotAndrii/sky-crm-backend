@@ -33,6 +33,13 @@ const userSchema = new Schema<IUser>(
     notes: { type: String, default: '', required: false },
     address: { type: String, default: '', required: false },
     user_identifier: { type: String, default: 'AM', required: true },
+    modules: {
+      users: { type: Boolean, required: true, default: false },
+      dashboard: { type: Boolean, required: true, default: false },
+      leads: { type: Boolean, required: true, default: false },
+      trash: { type: Boolean, required: true, default: false },
+      offices: { type: Boolean, required: true, default: false },
+    },
   },
   {
     timestamps: {

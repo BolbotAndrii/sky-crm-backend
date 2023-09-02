@@ -1,39 +1,39 @@
 import { Document, Model, FilterQuery } from 'mongoose'
 
 interface PaginationOptions {
-  sortBy?: string
-  limit?: string
+  sort_field?: string
+  per_page?: string
+  order?: string
   page?: string
   populate?: string
 }
 
 interface PaginationResult<T> {
-  results: T[]
-  page: number
-  limit: number
-  totalPages: number
-  totalResults: number
+  data: T[]
+  meta: { current: number; pageSize: number; total: number; totalPages: number }
+}
+
+const defaultSorter = 'created_at'
+
+enum Sorter {
+  ASC = 'asc',
+  DESC = 'desc',
 }
 
 const paginate = <T extends Document>(schema: Model<T>) => {
-  // @ts-ignore
   schema.statics.paginate = async function (
     filter: FilterQuery<T>,
     options: PaginationOptions,
   ): Promise<PaginationResult<T>> {
-    let sort = ''
-    if (options.sortBy) {
-      const sortingCriteria: string[] = []
-      options.sortBy.split(',').forEach((sortOption) => {
-        const [key, order] = sortOption.split(':')
-        sortingCriteria.push((order === 'desc' ? '-' : '') + key)
-      })
-      sort = sortingCriteria.join(' ')
+    const sort = {}
+
+    if (options.sort_field) {
+      sort[options.sort_field] = options.order === Sorter.DESC ? -1 : 1
     } else {
-      sort = 'created_at'
+      sort[defaultSorter] = -1
     }
 
-    const limit = options.limit && parseInt(options.limit, 10) > 0 ? parseInt(options.limit, 10) : 10
+    const limit = options.per_page && parseInt(options.per_page, 10) > 0 ? parseInt(options.per_page, 10) : 10
     const page = options.page && parseInt(options.page, 10) > 0 ? parseInt(options.page, 10) : 1
     const skip = (page - 1) * limit
 
@@ -56,12 +56,15 @@ const paginate = <T extends Document>(schema: Model<T>) => {
     return Promise.all([countPromise, docsPromise]).then((values) => {
       const [totalResults, results] = values
       const totalPages = Math.ceil(totalResults / limit)
-      const result: PaginationResult<T> = {
-        results,
-        page,
-        limit,
+      const meta: any = {
+        current: page,
+        pageSize: limit,
+        total: totalResults,
         totalPages,
-        totalResults,
+      }
+      const result: PaginationResult<T> = {
+        data: results,
+        meta,
       }
       return Promise.resolve(result)
     })

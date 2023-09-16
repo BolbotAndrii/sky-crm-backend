@@ -1,7 +1,9 @@
-import mongoose, { Schema, model } from 'mongoose'
+import { Schema, model, Model, Document } from 'mongoose'
 import { ILead } from '../types/leadsType.js'
+import { paginate } from '../plugin/paginate.js'
+import { toJSON } from '../plugin/toJSON.js'
 
-const leadsModel = new Schema<ILead>({
+const leadSchema = new Schema<ILead>({
   first_name: { type: String, required: false, default: '' },
   last_name: { type: String, required: false, default: '' },
   email: { type: String, required: false, default: '' },
@@ -13,10 +15,11 @@ const leadsModel = new Schema<ILead>({
   offer: { type: String, required: false, default: '' },
   comment: { type: String, required: false, default: '' },
   ip: { type: Number, required: false, default: 0 },
-  office_id: { type: mongoose.Types.ObjectId, required: false, default: null },
+  office_id: { type: Schema.Types.ObjectId, required: false, default: null },
   params: { type: [], required: false, default: [] },
 })
 
-const LeadsModel = model<ILead>('Leads', leadsModel)
+leadSchema.plugin(paginate)
+leadSchema.plugin(toJSON)
 
-export { LeadsModel }
+export const lead_model: Model<Document & ILead> = model<Document & ILead>('Leads', leadSchema)

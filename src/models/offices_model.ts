@@ -1,7 +1,9 @@
-import { model, Schema } from 'mongoose'
+import { Document, Model, model, Schema } from 'mongoose'
 import { IOffice } from '../types/officesType.js'
+import { paginate } from '../plugin/paginate.js'
+import { toJSON } from '../plugin/toJSON.js'
 
-const officesModel = new Schema<IOffice>(
+const offices_model = new Schema<IOffice>(
   {
     title: { type: String, required: false, default: '' },
     description: { type: String, required: false, default: '' },
@@ -30,5 +32,6 @@ const officesModel = new Schema<IOffice>(
     },
   },
 )
-
-module.exports = model<IOffice>('Offices', officesModel)
+offices_model.plugin(paginate)
+offices_model.plugin(toJSON)
+export const office_model: Model<Document & IOffice> = model<Document & IOffice>('Offices', offices_model)

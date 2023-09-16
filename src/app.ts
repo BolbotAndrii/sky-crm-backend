@@ -52,3 +52,4 @@ export const start = async () => {
     process.exit(1)
   }
 }
+

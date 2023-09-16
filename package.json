@@ -14,7 +14,7 @@
     "build": "rimraf ./build && npx tsc",
     "lint": "npx eslint ./src",
     "format": "npx eslint ./src --fix",
-    "client": "npm run start --prefix client",
+    "client": "npm run start --prefix ../sky-crm-frontend",
     "server": "npx nodemon",
     "dev": "npm run server"
   },

@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { auth } from '../midelwares/auth.js'
 import { Actions } from '../constants/roles_rights.js'
-import { createOffice, getOffices, updateOffice, deleteOffice, getOffice } from '../validation/office_validation.js'
+// import { createOffice, getOffices, updateOffice, deleteOffice, getOffice } from '../validation/office_validation.js'
 import * as officeController from '../controller/office_controller.js'
 import { validate } from '../midelwares/validate.js'
 import { catchAsync } from '../utils/catchAsync.js'
@@ -38,7 +38,7 @@ office_router.get(OfficeRoutes.GET_OFFICE_BY_ID, validate(getOffice), catchAsync
 office_router.put(
   OfficeRoutes.UPDATE,
   auth(Actions.UPDATE_OFFICE),
-  validate(updateOffice),
+
   catchAsync(officeController.updateOffice),
 )
 

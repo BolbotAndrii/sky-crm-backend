@@ -4,14 +4,21 @@ import { ApiError } from '../utils/ApiError.js'
 import * as leadService from '../services/lead_service.js'
 import { pick } from '../utils/pick.js'
 
+const createPiblickLead = async (req: Request, res: Response) => {
+  const lead = await leadService.createPublickLead(req.body)
+  if (lead) return res.status(httpStatus.CREATED).send({ status: true })
+  res.status(httpStatus.BAD_REQUEST).send({ status: false })
+}
+
 const createLead = async (req: Request, res: Response) => {
   const user = await leadService.createLead(req.body)
   res.status(httpStatus.CREATED).send(user)
 }
 
 const getLeads = async (req: Request, res: Response) => {
-  const filter = pick(req.query, ['first_name', 'role_id'])
+  const filter = pick(req.query, ['created_at'])
   const options = pick(req.query, ['order', 'sort_field', 'per_page', 'page'])
+  options.populate = 'status'
   const office = await leadService.getAllLeads(filter, options)
   res.send(office)
 }
@@ -26,13 +33,13 @@ const getLead = async (req: Request, res: Response) => {
 }
 
 const updateLead = async (req: Request, res: Response) => {
-  const office = await leadService.updateLeadById(req.params.userId, req.body)
-  res.send(office)
+  const lead = await leadService.updateLeadById(req.query.leadId, req.body)
+  res.status(httpStatus.OK).send(lead)
 }
 
 const deleteLead = async (req: Request, res: Response) => {
-  await leadService.deleteLeadById(req.params.officeId)
-  res.status(httpStatus.NO_CONTENT).send()
+  await leadService.deleteLeadById(req.query.leadId)
+  res.status(httpStatus.OK).send({ status: httpStatus.OK })
 }
 
-export { createLead, getLeads, getLead, updateLead, deleteLead }
+export { createLead, getLeads, getLead, updateLead, deleteLead, createPiblickLead }

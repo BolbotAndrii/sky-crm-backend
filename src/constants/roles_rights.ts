@@ -5,6 +5,7 @@ export enum Actions {
   UPDATE_USER = 'update_user',
   DELETE_USER = 'delete_user',
   GET_USERS = 'get_users',
+  DELETE = 'get_users',
 }
 const allRoles = {
   [ROLES.SUPER_ADMIN]: [],

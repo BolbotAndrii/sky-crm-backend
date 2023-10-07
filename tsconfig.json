@@ -24,7 +24,7 @@
     "skipLibCheck": true
   },
   "include": ["./src/**/*",
-    "index.js"
+    "index"
   ],
   "exclude": ["node_modules"],
   "lib": ["esnext"],

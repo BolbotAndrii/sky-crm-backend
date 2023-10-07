@@ -7,8 +7,8 @@ const offices_model = new Schema<IOffice>(
   {
     title: { type: String, required: false, default: '' },
     description: { type: String, required: false, default: '' },
-    geos: { type: Schema.Types.ObjectId, ref: 'Geos', required: false, default: null },
-    status: { type: Schema.Types.ObjectId, ref: 'Statuses', required: false, default: null },
+    geos: { type: Schema.Types.ObjectId, ref: 'Geos', required: false },
+    status: { type: Schema.Types.ObjectId, ref: 'Statuses', required: false },
     priority: { type: Number, required: false, default: 0 },
     active: { type: Boolean, required: false, default: true },
     time_cards: {

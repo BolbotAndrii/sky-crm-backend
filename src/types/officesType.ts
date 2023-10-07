@@ -3,8 +3,9 @@ import { Document, Types } from 'mongoose'
 export interface IOffice extends Document {
   title: string
   description: string
-  geos: Types.ObjectId
-  status: Types.ObjectId
+  geos: null | Types.ObjectId
+  integration: null | Types.ObjectId
+  status: null | Types.ObjectId
   priority: number
   order: number
   active: boolean

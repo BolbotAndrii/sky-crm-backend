@@ -5,9 +5,10 @@ import { toJSON } from '../plugin/toJSON.js'
 
 const integrations_model = new Schema<IIntegration>(
   {
-    headers: [{ type: Object, required: false }],
+    office_id: { type: Schema.Types.ObjectId, required: true, ref: 'Offices', default: null },
+    headers: { type: Object, required: false },
     url: { type: String, required: false, default: '' },
-    data: [{ type: Object, required: false }],
+    data: { type: Object, required: false },
     active: { type: Boolean, required: false, default: true },
   },
   {

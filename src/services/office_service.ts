@@ -4,7 +4,7 @@ import { integration_model as Integration } from '../models/integration_model.js
 import { IOffice } from '../types/officesType.js'
 import { IIntegration } from '../types/integrationType.js'
 import { ApiError } from '../utils/ApiError.js'
-import { FilterQuery } from 'mongoose'
+import { Document, FilterQuery } from 'mongoose'
 
 interface PaginationOptions {
   sortBy?: string
@@ -21,8 +21,8 @@ const getAllOffices = async (filter: FilterQuery<IOffice>, options: PaginationOp
   const offices = await Office.paginate(filter, options)
   return offices
 }
-const getAllOfficesList = async (filter: FilterQuery<IOffice>, options: PaginationOptions) => {
-  const offices = await Office.find({}, '_id title')
+const getAllOfficesList = async () => {
+  const offices = await Office.find({}, '_id title').sort({ created_at: 1 })
   return offices
 }
 
@@ -57,11 +57,20 @@ const createIntegration = async (integrationBody: IIntegration) => {
 const getIntegration = async (id: string) => {
   return Integration.findById(id)
 }
+
 const getIntegrations = async (filter: FilterQuery<IOffice>, options: PaginationOptions) => {
-  const integrations = await Integration.paginate(filter, options)
-  return integrations
+  return await Integration.paginate(filter, options)
 }
-const updIntegration = async () => {}
+
+const updIntegration = async (data: any): Promise<Document | null> => {
+  const updatedIntegration = await Integration.findOneAndUpdate(
+    { _id: data.intId },
+    { $set: updateQuery },
+    { new: true },
+  )
+  return updatedIntegration
+}
+
 const removeIntegration = async () => {}
 
 const createGeo = async () => {}

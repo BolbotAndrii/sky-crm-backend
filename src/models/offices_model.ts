@@ -7,6 +7,7 @@ const offices_model = new Schema<IOffice>(
   {
     title: { type: String, required: false, default: '' },
     description: { type: String, required: false, default: '' },
+    integration: { type: Schema.Types.ObjectId, ref: 'Integrations', required: false, default: null },
     geos: { type: Schema.Types.ObjectId, ref: 'Geos', required: false, default: null },
     status: { type: Schema.Types.ObjectId, ref: 'Statuses', required: false, default: null },
     priority: { type: Number, required: false, default: 0 },

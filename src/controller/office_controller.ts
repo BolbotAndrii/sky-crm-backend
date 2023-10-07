@@ -16,9 +16,7 @@ const getOffices = async (req: Request, res: Response) => {
   res.send(office)
 }
 const getOfficesList = async (req: Request, res: Response) => {
-  const filter = pick(req.query, ['priority'])
-  const options = pick(req.query, ['order', 'sort_field', 'per_page', 'page'])
-  const office = await officeService.getAllOfficesList(filter, options)
+  const office = await officeService.getAllOfficesList()
   res.send(office)
 }
 

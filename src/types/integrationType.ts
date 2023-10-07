@@ -1,9 +1,10 @@
 import { Document, Types } from 'mongoose'
 
 export interface IIntegration extends Document {
-  headers: []
+  office_id: null | Types.ObjectId
+  headers: {}
   url: string
-  data: []
+  data: {}
   active: boolean
   created_at: Date
   updated_at: Date

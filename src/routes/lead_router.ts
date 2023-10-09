@@ -1,9 +1,9 @@
 import { Router } from 'express'
 import { auth } from '../midelwares/auth.js'
-// import { Actions } from '../constants/roles_rights.js'
-// import { createLead, getLeads, updateLead, deleteLead, getLead } from '../validation/lead_validation.js'
+import { Actions } from '../constants/roles_rights.js'
+import { createLead, getLeads, updateLead, deleteLead, getLead } from '../validation/lead_validation.js'
 import * as leadController from '../controller/lead_controller.js'
-// import { validate } from '../midelwares/validate.js'
+import { validate } from '../midelwares/validate.js'
 import { catchAsync } from '../utils/catchAsync.js'
 
 export const lead_router = Router()

@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import { auth } from '../midelwares/auth.js'
 import { Actions } from '../constants/roles_rights.js'
-// import { createOffice, getOffices, updateOffice, deleteOffice, getOffice } from '../validation/office_validation.js'
+import { createOffice, getOffices, updateOffice, deleteOffice, getOffice } from '../validation/office_validation.js'
 import * as officeController from '../controller/office_controller.js'
 import { validate } from '../midelwares/validate.js'
 import { catchAsync } from '../utils/catchAsync.js'

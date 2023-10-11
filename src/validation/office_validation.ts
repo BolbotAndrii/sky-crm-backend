@@ -7,7 +7,7 @@ const createOffice = {
     title: Joi.string().required(),
     description: Joi.string().required(),
     priority: Joi.number(),
-    active: Joi.boolean(),
+    status: Joi.number(),
     time_cards: Joi.object(),
   }),
 }

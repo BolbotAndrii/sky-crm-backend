@@ -35,10 +35,7 @@ const updateOfficeById = async (officeId: string, updateBody: Partial<IOffice>) 
   if (!office) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Office not found')
   }
-
-  // @ts-ignore
-  await office.save()
-  return office
+  return await Office.findByIdAndUpdate(officeId, updateBody, { new: true })
 }
 
 const deleteOfficeById = async (officeId: string) => {

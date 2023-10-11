@@ -35,12 +35,7 @@ office_router.post(OfficeRoutes.CREATE, auth(), validate(createOffice), catchAsy
 office_router.get(OfficeRoutes.GET_FULL_DATA_LIST, validate(getOffices), catchAsync(officeController.getOffices))
 office_router.get(OfficeRoutes.GET_LIST, validate(getOffices), catchAsync(officeController.getOfficesList))
 office_router.get(OfficeRoutes.GET_OFFICE_BY_ID, validate(getOffice), catchAsync(officeController.getOffice))
-office_router.put(
-  OfficeRoutes.UPDATE,
-  auth(Actions.UPDATE_OFFICE),
-
-  catchAsync(officeController.updateOffice),
-)
+office_router.put(OfficeRoutes.UPDATE, auth(), catchAsync(officeController.updateOffice))
 
 office_router.delete(
   OfficeRoutes.DELETE,

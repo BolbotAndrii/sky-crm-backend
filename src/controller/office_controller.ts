@@ -23,7 +23,7 @@ const getOfficesList = async (req: Request, res: Response) => {
 }
 
 const getOffice = async (req: Request, res: Response) => {
-  const id = req.body.officeId
+  const id = req.query.officeId
   const office = await officeService.getOfficeById(id)
   if (!office) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Office not found')
@@ -32,7 +32,7 @@ const getOffice = async (req: Request, res: Response) => {
 }
 
 const updateOffice = async (req: Request, res: Response) => {
-  const office = await officeService.updateOfficeById(req.params.userId, req.body)
+  const office = await officeService.updateOfficeById(req.query.officeId, req.body)
   res.send(office)
 }
 

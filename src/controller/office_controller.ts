@@ -55,6 +55,15 @@ const getOfficeIntegration = async (req: Request, res: Response) => {
   res.status(httpStatus.OK).send(integration)
 }
 
+const getOfficeIntegrationBuyOfficeId = async (req: Request, res: Response) => {
+  const integration = await officeService.getOfficeIntegrationBuyOfficeId(req.query.id)
+
+  if (!integration) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Integration not found')
+  }
+  res.status(httpStatus.OK).send(integration)
+}
+
 const getOfficeIntegrations = async (req: Request, res: Response) => {
   const integrations = await officeService.getIntegrations(req.body)
   if (!integrations) {
@@ -157,6 +166,7 @@ export {
   deleteOffice,
   setOfficeIntegration,
   getOfficeIntegration,
+  getOfficeIntegrationBuyOfficeId,
   getOfficeIntegrations,
   updateOfficeIntegration,
   deleteOfficeIntegration,

@@ -57,6 +57,11 @@ const getIntegration = async (id: string) => {
   return integration
 }
 
+const getOfficeIntegrationBuyOfficeId = async (id: string) => {
+  const integration = await Integration.find({ 'office_data.office_id': id })
+  return integration
+}
+
 const getIntegrations = async (filter: FilterQuery<IOffice>, options: PaginationOptions) => {
   const integrations = await Integration.paginate(filter, options)
   return integrations
@@ -95,6 +100,7 @@ export {
   deleteOfficeById,
   createIntegration,
   getIntegration,
+  getOfficeIntegrationBuyOfficeId,
   getIntegrations,
   updIntegration,
   removeIntegration,

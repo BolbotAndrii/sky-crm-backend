@@ -5,7 +5,7 @@ import { IOffice } from '../types/officesType.js'
 import { IIntegration } from '../types/integrationType.js'
 import { ApiError } from '../utils/ApiError.js'
 import { FilterQuery } from 'mongoose'
-
+import { replaceValuesInObject } from '../plugin/utils.js'
 interface PaginationOptions {
   sortBy?: string
   limit?: string
@@ -35,7 +35,7 @@ const updateOfficeById = async (officeId: string, updateBody: Partial<IOffice>) 
   if (!office) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Office not found')
   }
-  return await Office.findByIdAndUpdate(officeId, updateBody, { new: true })
+  return Office.findByIdAndUpdate(officeId, updateBody, { new: true })
 }
 
 const deleteOfficeById = async (officeId: string) => {
@@ -54,22 +54,32 @@ const createIntegration = async (integrationBody: IIntegration) => {
 const getIntegration = async (id: string) => {
   return Integration.findById(id)
 }
+
 const getIntegrations = async (filter: FilterQuery<IOffice>, options: PaginationOptions) => {
   const integrations = await Integration.paginate(filter, options)
   return integrations
 }
+
 const updIntegration = async () => {}
+
 const removeIntegration = async () => {}
 
 const createGeo = async () => {}
+
 const getGeo = async () => {}
+
 const getGeos = async () => {}
+
 const updateGeo = async () => {}
+
 const removeGeo = async () => {}
 
 const setStatus = async () => {}
+
 const getStatus = async () => {}
+
 const updStatus = async () => {}
+
 const removeStatus = async () => {}
 
 export {

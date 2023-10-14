@@ -73,7 +73,7 @@ const getOfficeIntegrations = async (req: Request, res: Response) => {
 }
 
 const updateOfficeIntegration = async (req: Request, res: Response) => {
-  const integration = await officeService.updIntegration(req.body)
+  const integration = await officeService.updIntegration(req.query.integrationId, req.body)
   if (!integration) {
     throw new ApiError(httpStatus.NOT_FOUND, 'An error when update')
   }

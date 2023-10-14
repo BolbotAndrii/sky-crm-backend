@@ -67,8 +67,8 @@ const getIntegrations = async (filter: FilterQuery<IOffice>, options: Pagination
   return integrations
 }
 
-const updIntegration = async () => {
-  return Integration.findByIdAndUpdate(officeId, updateBody, { new: true })
+const updIntegration = async (integrationId: string, updateBody: Partial<IIntegration>) => {
+  return Integration.findByIdAndUpdate(integrationId, updateBody, { new: true })
 }
 
 const removeIntegration = async () => {}

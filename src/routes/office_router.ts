@@ -13,7 +13,7 @@ enum OfficeRoutes {
   GET_FULL_DATA_LIST = '/full-list',
   GET_OFFICE_BY_ID = '/office',
   UPDATE = '/update',
-  DELETE = '/delete',
+  DELETE = '/delete/:id',
   ADD_INTEGRATION = '/integration/add',
   GET_INTEGRATION = '/integration/get',
   GET_INTEGRATIONS = '/integration/list',
@@ -37,12 +37,7 @@ office_router.get(OfficeRoutes.GET_LIST, validate(getOffices), catchAsync(office
 office_router.get(OfficeRoutes.GET_OFFICE_BY_ID, validate(getOffice), catchAsync(officeController.getOffice))
 office_router.put(OfficeRoutes.UPDATE, auth(), catchAsync(officeController.updateOffice))
 
-office_router.delete(
-  OfficeRoutes.DELETE,
-  auth(Actions.DELETE_OFFICE),
-  validate(deleteOffice),
-  catchAsync(officeController.deleteOffice),
-)
+office_router.delete(OfficeRoutes.DELETE, catchAsync(officeController.deleteOffice))
 
 // integrations
 office_router.post(OfficeRoutes.ADD_INTEGRATION, catchAsync(officeController.setOfficeIntegration))

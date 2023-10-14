@@ -37,8 +37,8 @@ const updateOffice = async (req: Request, res: Response) => {
 }
 
 const deleteOffice = async (req: Request, res: Response) => {
-  await officeService.deleteOfficeById(req.params.officeId)
-  res.status(httpStatus.NO_CONTENT).send()
+  const office = await officeService.deleteOfficeById(req.params.id)
+  res.status(httpStatus.OK).send(office)
 }
 
 const setOfficeIntegration = async (req: Request, res: Response) => {

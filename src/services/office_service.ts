@@ -1,11 +1,13 @@
 import httpStatus from 'http-status'
 import { office_model as Office } from '../models/offices_model.js'
+import { geo_model as Geo } from '../models/geo_model.js'
 import { integration_model as Integration } from '../models/integration_model.js'
 import { IOffice } from '../types/officesType.js'
 import { IIntegration } from '../types/integrationType.js'
 import { ApiError } from '../utils/ApiError.js'
 import { FilterQuery } from 'mongoose'
 import { replaceValuesInObject } from '../plugin/utils.js'
+import { IGeo } from '../types/geosType.js'
 interface PaginationOptions {
   sortBy?: string
   limit?: string
@@ -39,13 +41,12 @@ const updateOfficeById = async (officeId: string, updateBody: Partial<IOffice>) 
 }
 
 const deleteOfficeById = async (officeId: string) => {
-  const office = await getOfficeById(officeId)
+  const office = await Office.findByIdAndRemove(officeId)
   if (!office) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Office not found')
+  } else {
+    return { message: 'Office was successfully removed' }
   }
-  // @ts-ignore
-  await office.remove()
-  return office
 }
 
 const createIntegration = async (integrationBody: IIntegration) => {
@@ -64,7 +65,9 @@ const updIntegration = async () => {}
 
 const removeIntegration = async () => {}
 
-const createGeo = async () => {}
+const createGeo = async (geoBody: IGeo) => {
+  return Geo.create({ ...geoBody })
+}
 
 const getGeo = async () => {}
 

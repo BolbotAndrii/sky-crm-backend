@@ -5,6 +5,7 @@ export interface IOffice extends Document {
   description: string
   geos: Types.ObjectId
   status: Types.ObjectId
+  integrations: Types.ObjectId
   priority: number
   order: number
   active: boolean

@@ -5,6 +5,7 @@ import { ILead } from '../types/leadsType.js'
 import { ApiError } from '../utils/ApiError.js'
 import { FilterQuery, Types } from 'mongoose'
 import { STATUS } from '../constants/status.js'
+import { replaceValuesInObject } from '../plugin/utils.js'
 import moment from 'moment'
 interface PaginationOptions {
   sortBy?: string
@@ -30,6 +31,10 @@ const createPublickLead = async (leadBody: ILead) => {
 
   return newLead
 }
+
+const sendLeadToOffice = async (data: object) => {}
+
+const findAvailOffice = async (data: object) => {}
 
 const createLead = async (leadBody: ILead) => {
   return Lead.create({ ...leadBody })

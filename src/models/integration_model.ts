@@ -12,11 +12,14 @@ const integrations_model = new Schema<IIntegration>(
     options: {
       url: { type: String, required: false, default: true },
       method: { type: String, required: false, default: true },
-      body_type: { type: String, required: false, default: true },
+      content_type: { type: String, required: false, default: true },
     },
     headers: { type: Object, required: false },
-    data: { type: Object, required: false },
     template: { type: Object, required: false },
+    response: {
+      autologin: { type: String, required: false, default: true },
+      ext_status: { type: String, required: false, default: true },
+    },
   },
   {
     timestamps: {

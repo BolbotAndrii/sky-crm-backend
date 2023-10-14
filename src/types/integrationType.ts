@@ -4,16 +4,19 @@ export interface IIntegration extends Document {
   options: {
     url: string
     method: string
-    body_type: string
+    content_type: string
   }
   office_data: {
     office_id: Types.ObjectId
     active: boolean
   }
   headers: {}
-  data: {}
-  template: {}
 
+  template: {}
+  response: {
+    autologin: string
+    ext_status: string
+  }
   created_at: Date
   updated_at: Date
 }

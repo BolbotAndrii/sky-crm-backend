@@ -47,6 +47,7 @@ const setOfficeIntegration = async (req: Request, res: Response) => {
 }
 
 const getOfficeIntegration = async (req: Request, res: Response) => {
+  console.log(req.query.id)
   const integration = await officeService.getIntegration(req.query.id)
   if (!integration) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Integration not found')

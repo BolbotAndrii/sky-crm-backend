@@ -53,7 +53,8 @@ const createIntegration = async (integrationBody: IIntegration) => {
   return Integration.create({ ...integrationBody })
 }
 const getIntegration = async (id: string) => {
-  return Integration.findById(id)
+  const integration = await Integration.findById(id)
+  return integration
 }
 
 const getIntegrations = async (filter: FilterQuery<IOffice>, options: PaginationOptions) => {

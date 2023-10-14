@@ -58,7 +58,7 @@ const getIntegration = async (id: string) => {
 }
 
 const getOfficeIntegrationBuyOfficeId = async (id: string) => {
-  const integration = await Integration.find({ 'office_data.office_id': id })
+  const integration = await Integration.findOne({ 'office_data.office_id': id })
   return integration
 }
 
@@ -67,7 +67,9 @@ const getIntegrations = async (filter: FilterQuery<IOffice>, options: Pagination
   return integrations
 }
 
-const updIntegration = async () => {}
+const updIntegration = async () => {
+  return Integration.findByIdAndUpdate(officeId, updateBody, { new: true })
+}
 
 const removeIntegration = async () => {}
 

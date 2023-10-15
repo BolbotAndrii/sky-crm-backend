@@ -43,10 +43,7 @@ office_router.delete(OfficeRoutes.DELETE, catchAsync(officeController.deleteOffi
 // integrations
 office_router.post(OfficeRoutes.ADD_INTEGRATION, catchAsync(officeController.setOfficeIntegration))
 office_router.get(OfficeRoutes.GET_INTEGRATION, catchAsync(officeController.getOfficeIntegration))
-office_router.get(
-  OfficeRoutes.GET_INTEGRATION_BUY_OFFICE_ID,
-  catchAsync(officeController.getOfficeIntegrationBuyOfficeId),
-)
+office_router.get(OfficeRoutes.GET_INTEGRATION_BUY_OFFICE_ID, catchAsync(officeController.getOfficeIntegration))
 office_router.get(OfficeRoutes.GET_INTEGRATIONS, catchAsync(officeController.getOfficeIntegrations))
 office_router.put(OfficeRoutes.UPDATE_INTEGRATION, catchAsync(officeController.updateOfficeIntegration))
 office_router.delete(OfficeRoutes.DELETE_INTEGRATION, catchAsync(officeController.deleteOfficeIntegration))

@@ -2,7 +2,7 @@ import { Document, Types } from 'mongoose'
 
 export interface IGeo extends Document {
   type: string
-  geos: string
+  geos: string[]
   limit: number
   current_count: number
   active: boolean

@@ -6,8 +6,8 @@ import { toJSON } from '../plugin/toJSON.js'
 const geos_model = new Schema<IGeo>(
   {
     type: { type: String, required: false, default: '' },
-    office_id: { type: Schema.Types.ObjectId, required: false, default: null },
-    geos: { type: String, required: false },
+    office_id: { type: Schema.Types.ObjectId, required: true, default: null },
+    geos: { type: Array, required: false, default: [] },
     limit: { type: Number, required: false, default: 0 },
     current_count: { type: Number, required: false, default: 0 },
     active: { type: Boolean, required: false, default: true },

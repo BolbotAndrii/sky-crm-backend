@@ -2,6 +2,7 @@ import { Document, Model, model, Schema } from 'mongoose'
 import { IIntegration } from '../types/integrationType.js'
 import { paginate } from '../plugin/paginate.js'
 import { toJSON } from '../plugin/toJSON.js'
+import { office_model } from './offices_model.js'
 
 const integrations_model = new Schema<IIntegration>(
   {
@@ -28,6 +29,15 @@ const integrations_model = new Schema<IIntegration>(
     },
   },
 )
+
+integrations_model.pre('save', async function () {
+  const office = await office_model.findOne({ _id: this.office_data.office_id.toString() })
+
+  if (office) {
+    office.integrations = this._id
+    await office.save()
+  }
+})
 integrations_model.plugin(paginate)
 integrations_model.plugin(toJSON)
 export const integration_model: Model<Document & IIntegration> = model<Document & IIntegration>(

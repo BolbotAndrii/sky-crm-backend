@@ -1,23 +1,25 @@
 import { Document, Model, model, Schema } from 'mongoose'
-import { IOffice } from '../types/officesType.js'
+import { IStatuses } from '../types/statusesType.js'
 import { paginate } from '../plugin/paginate.js'
 import { toJSON } from '../plugin/toJSON.js'
+import { office_model } from './offices_model.js'
 
-const offices_model = new Schema<IOffice>(
+const statuses_schema = new Schema<IStatuses>(
   {
-    title: { type: String, required: false, default: '' },
-    description: { type: String, required: false, default: '' },
-    geos: { type: Schema.Types.ObjectId, ref: 'Geos', required: false },
-    status: { type: Schema.Types.ObjectId, ref: 'Statuses', required: false },
-    priority: { type: Number, required: false, default: 0 },
-    active: { type: Boolean, required: false, default: true },
-    time_cards: {
-      type: {
-        time_start: String,
-        time_end: String,
-      },
-      required: false,
-      default: { time_start: '10:00', time_end: '19:00' },
+    office_data: {
+      office_id: { type: Schema.Types.ObjectId, required: false, default: null },
+      active: { type: Boolean, required: false, default: true },
+    },
+    options: {
+      url: { type: String, required: false, default: true },
+      method: { type: String, required: false, default: true },
+      content_type: { type: String, required: false, default: true },
+    },
+    headers: { type: Object, required: false },
+    template: { type: Object, required: false },
+    response: {
+      autologin: { type: String, required: false, default: true },
+      ext_status: { type: String, required: false, default: true },
     },
   },
   {
@@ -27,6 +29,15 @@ const offices_model = new Schema<IOffice>(
     },
   },
 )
-offices_model.plugin(paginate)
-offices_model.plugin(toJSON)
-export const office_model: Model<Document & IOffice> = model<Document & IOffice>('Offices', offices_model)
+
+statuses_schema.pre('save', async function () {
+  const office = await office_model.findOne({ _id: this.office_data.office_id.toString() })
+
+  if (office) {
+    office.statuses = this._id
+    await office.save()
+  }
+})
+statuses_schema.plugin(paginate)
+statuses_schema.plugin(toJSON)
+export const statuses_model: Model<Document & IStatuses> = model<Document & IStatuses>('Statuses', statuses_schema)

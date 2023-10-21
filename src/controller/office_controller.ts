@@ -78,14 +78,11 @@ const deleteOfficeIntegration = async (req: Request, res: Response) => {
 
 const setOfficeGeo = async (req: Request, res: Response) => {
   const geo = await officeService.createGeo(req.body)
-  if (!geo) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Created successfully')
-  }
   res.status(httpStatus.CREATED).send(geo)
 }
 
 const getOfficeGeo = async (req: Request, res: Response) => {
-  const geo = await officeService.getGeo(req.body)
+  const geo = await officeService.getGeo(req.query.officeId)
   if (!geo) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Geo not found')
   }
@@ -101,31 +98,24 @@ const getOfficeGeos = async (req: Request, res: Response) => {
 }
 
 const updateOfficeGeo = async (req: Request, res: Response) => {
-  const geo = await officeService.updateGeo(req.body)
-  if (!geo) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Geo have an error when update')
-  }
+  const geo = await officeService.updateGeo(req.query.officeId, req.body)
+
   res.status(httpStatus.OK).send(geo)
 }
 
 const deleteOfficeGeo = async (req: Request, res: Response) => {
-  const geo = await officeService.removeGeo(req.body)
-  if (!geo) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Geo removed')
-  }
+  const geo = await officeService.removeGeo(req.query.officeId, req.query.geoId)
+
   res.status(httpStatus.NO_CONTENT).send(geo)
 }
 
 const setOfficeCheckStatus = async (req: Request, res: Response) => {
   const status = await officeService.setStatus(req.body)
-  if (!status) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Created successfully')
-  }
   res.status(httpStatus.CREATED).send(status)
 }
 
 const getOfficeCheckStatus = async (req: Request, res: Response) => {
-  const status = await officeService.getStatus(req.body)
+  const status = await officeService.getStatus(req.query.officeId)
   if (!status) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Status not found')
   }

@@ -26,7 +26,7 @@ enum OfficeRoutes {
   UPDATE_GEO = '/geo/update',
   DELETE_GEO = '/geo/delete',
   ADD_STATUS_REQUEST = '/status/add',
-  GET_STATUS_REQUEST = '/status/het',
+  GET_STATUS_REQUEST = '/status/get',
   UPDATE_STATUS_REQUEST = '/status/update',
   DELETE_STATUS_REQUEST = '/status/delete',
 }

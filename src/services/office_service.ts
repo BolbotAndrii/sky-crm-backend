@@ -2,6 +2,7 @@ import httpStatus from 'http-status'
 import { office_model as Office } from '../models/offices_model.js'
 import { geo_model as Geo } from '../models/geo_model.js'
 import { integration_model as Integration } from '../models/integration_model.js'
+import { statuses_model as Statuses } from '../models/statuses_model.js'
 import { IOffice } from '../types/officesType.js'
 import { IIntegration } from '../types/integrationType.js'
 import { ApiError } from '../utils/ApiError.js'
@@ -74,22 +75,77 @@ const updIntegration = async (integrationId: string, updateBody: Partial<IIntegr
 const removeIntegration = async () => {}
 
 const createGeo = async (geoBody: IGeo) => {
-  return Geo.create({ ...geoBody })
+  const filter = { office_id: geoBody.office_id }
+
+  const existingGeo = await Geo.findOne(filter)
+
+  if (existingGeo) {
+    const updatedGeo = await Geo.findOneAndUpdate(filter, geoBody, { new: true })
+    return updatedGeo
+  } else {
+    const newGeo = new Geo(geoBody)
+    await newGeo.save()
+    return newGeo
+  }
 }
 
-const getGeo = async () => {}
+const getGeo = async (officeId) => {
+  const geo = await Geo.findOne({ office_id: officeId })
+
+  return geo
+}
 
 const getGeos = async () => {}
 
-const updateGeo = async () => {}
+const updateGeo = async (officeId, body) => {
+  const filter = { office_id: officeId }
 
-const removeGeo = async () => {}
+  const existingGeo = await Geo.findOne(filter)
 
-const setStatus = async () => {}
+  const updatedItems = existingGeo.items.map((item, index) => {
+    return index < body.items.length ? { ...item._doc, ...body.items[index] } : item
+  })
 
-const getStatus = async () => {}
+  existingGeo.items = updatedItems
+  const updatedGeo = await Geo.findOneAndUpdate(filter, existingGeo, { new: true })
 
-const updStatus = async () => {}
+  return updatedGeo
+}
+
+const removeGeo = async (officeId, geoId) => {
+  const filter = { office_id: officeId }
+  const update = { $pull: { items: { _id: geoId } } }
+  const result = await Geo.findOneAndUpdate(filter, update, { new: true })
+
+  if (result && result.items.length === 0) {
+    await Geo.findOneAndRemove(filter)
+  }
+
+  return result
+}
+
+const setStatus = async (body) => {
+  const data = new Statuses(body)
+  await data.save()
+  return data
+}
+
+const getStatus = async (officeId) => {
+  const statuses = await Statuses.findOne({ 'office_data.office_id': officeId })
+
+  return statuses
+}
+
+const updStatus = async (updateBody) => {
+  console.log(updateBody)
+  const updatedStatusReq = await Statuses.findOneAndUpdate(
+    { 'office_data.office_id': updateBody.office_data.office_id },
+    updateBody,
+    { new: true },
+  )
+
+  return updatedStatusReq
+}
 
 const removeStatus = async () => {}
 

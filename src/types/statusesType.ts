@@ -1,10 +1,22 @@
 import { Document, Types } from 'mongoose'
 
-export interface IStatus extends Document {
-  headers: []
-  url: string
-  data: []
-  active: boolean
+export interface IStatuses extends Document {
+  options: {
+    url: string
+    method: string
+    content_type: string
+  }
+  office_data: {
+    office_id: Types.ObjectId
+    active: boolean
+  }
+  headers: {}
+
+  template: {}
+  response: {
+    autologin: string
+    ext_status: string
+  }
   created_at: Date
   updated_at: Date
 }

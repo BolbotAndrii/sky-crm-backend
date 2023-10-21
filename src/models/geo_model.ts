@@ -2,15 +2,21 @@ import { Document, Model, model, Schema } from 'mongoose'
 import { IGeo } from '../types/geosType.js'
 import { paginate } from '../plugin/paginate.js'
 import { toJSON } from '../plugin/toJSON.js'
+import { office_model } from './offices_model.js'
 
 const geos_model = new Schema<IGeo>(
   {
-    type: { type: String, required: false, default: '' },
     office_id: { type: Schema.Types.ObjectId, required: true, default: null },
-    geos: { type: Array, required: false, default: [] },
-    limit: { type: Number, required: false, default: 0 },
-    current_count: { type: Number, required: false, default: 0 },
-    active: { type: Boolean, required: false, default: true },
+    items: [
+      {
+        id: Schema.Types.ObjectId,
+        country: { type: Array, required: true, default: [] },
+        offer: { type: String, required: true, default: '' },
+        limits: { type: Number, required: true, default: 0 },
+        current_count: { type: Number, required: false, default: 0 },
+        priority: { type: Number, required: false, default: 0 },
+      },
+    ],
   },
   {
     timestamps: {
@@ -19,6 +25,16 @@ const geos_model = new Schema<IGeo>(
     },
   },
 )
+
+geos_model.pre('save', async function () {
+  const office = await office_model.findOne({ _id: this.office_id.toString() })
+
+  if (office) {
+    office.geos = this._id
+    await office.save()
+  }
+})
+
 geos_model.plugin(paginate)
 geos_model.plugin(toJSON)
 export const geo_model: Model<Document & IGeo> = model<Document & IGeo>('Geos', geos_model)

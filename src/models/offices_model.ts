@@ -10,7 +10,7 @@ const offices_model = new Schema<IOffice>(
     geos: { type: Schema.Types.ObjectId, ref: 'Geos', required: false, default: null },
     integrations: { type: Schema.Types.ObjectId, ref: 'Integrations', required: false, default: null },
     priority: { type: Number, required: false, default: 0 },
-    // status: { type: Schema.Types.ObjectId, ref: 'Statuses', required: false, default: null },
+    statuses: { type: Schema.Types.ObjectId, ref: 'Statuses', required: false, default: null },
     time_cards: {
       type: {
         time_start: String,

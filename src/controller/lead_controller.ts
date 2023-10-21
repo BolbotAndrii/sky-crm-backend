@@ -16,7 +16,28 @@ const createLead = async (req: Request, res: Response) => {
 }
 
 const getLeads = async (req: Request, res: Response) => {
-  const filter = pick(req.query, ['created_at', 'current_status'])
+  const filter = pick(req.query, [
+    'created_at',
+    'current_status',
+    'account',
+    'affilate',
+    'buyer',
+    'click_id',
+    'comment',
+    'country',
+    'country_code',
+    'domain',
+    'email',
+    'first_name',
+    'geo',
+    'ip',
+    'language',
+    'last_name',
+    'lead_password',
+    'offer',
+    'phone',
+    'phone_code',
+  ])
   const options = pick(req.query, ['order', 'sort_field', 'per_page', 'page'])
   options.populate = 'status'
   const office = await leadService.getAllLeads(filter, options)

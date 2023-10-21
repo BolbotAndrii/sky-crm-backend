@@ -27,12 +27,12 @@ const getUser = async (req: Request, res: Response) => {
 }
 
 const updateUser = async (req: Request, res: Response) => {
-  const user = await userService.updateUserById(req.params.userId, req.body)
+  const user = await userService.updateUserById(req.query.userId, req.body)
   res.send(user)
 }
 
 const deleteUser = async (req: Request, res: Response) => {
-  await userService.deleteUserById(req.params.userId)
+  await userService.deleteUserById(req.query.userId)
   res.status(httpStatus.NO_CONTENT).send()
 }
 

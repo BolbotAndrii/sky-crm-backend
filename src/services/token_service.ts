@@ -45,7 +45,8 @@ const saveToken = async (
 
 const verifyToken = async (token: string, type: string): Promise<IToken> => {
   const payload = jwt.verify(token, process.env.JWT_SECRET) as { sub: string }
-  const tokenDoc = await Token.findOne({ token, type, user: payload.sub, blacklisted: false })
+  const tokenDoc = await Token.findOne({ token, type, user: payload.sub })
+
   if (!tokenDoc) {
     throw new Error('Token not found')
   }

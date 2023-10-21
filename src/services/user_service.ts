@@ -40,24 +40,17 @@ const updateUserById = async (userId: string, updateBody: Partial<IUser>) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
   }
 
-  // @ts-ignore
-
   if (updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Email already taken')
   }
-  Object.assign(user, updateBody)
+
+  Object.assign(user, { ...updateBody, password: user.password })
   await user.save()
   return user
 }
 
 const deleteUserById = async (userId: string) => {
-  const user = await getUserById(userId)
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'User not found')
-  }
-  // @ts-ignore
-  await user.remove()
-  return user
+  return await User.findByIdAndDelete(userId)
 }
 
 export { createUser, queryUsers, getUserById, getUserByEmail, updateUserById, deleteUserById }

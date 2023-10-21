@@ -33,12 +33,15 @@ const refreshAuth = async (
 ): Promise<{ access: { token: string; expires: Date }; refresh: { token: string; expires: Date } }> => {
   try {
     const refreshTokenDoc = await tokenService.verifyToken(refreshToken, tokenTypes.REFRESH)
+
     const user = await userService.getUserById(refreshTokenDoc.user)
     if (!user) {
       throw new Error()
     }
+
     await refreshTokenDoc.deleteOne()
-    return tokenService.generateAuthTokens(user)
+    const tokens = await tokenService.generateAuthTokens(user)
+    return { user, tokens }
   } catch (error) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Please authenticate')
   }

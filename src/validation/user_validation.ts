@@ -42,18 +42,30 @@ const getUser = {
 }
 
 const updateUser = {
-  params: Joi.object().keys({
+  query: Joi.object().keys({
     userId: Joi.required().custom(objectId),
   }),
-  body: Joi.object()
-    .keys({
-      first_name: Joi.string().required(),
-      last_name: Joi.string().required(),
-      email: Joi.string().required().email(),
-      role_id: Joi.number().required(),
-      user_identifier: Joi.string().required(),
-    })
-    .min(1),
+  body: Joi.object({
+    first_name: Joi.string().required(),
+    last_name: Joi.string().required(),
+    email: Joi.string().required().email(),
+    role_id: Joi.number().required(),
+    user_identifier: Joi.string().required(),
+    background_color: Joi.string().allow(null),
+    status: Joi.number().required(),
+    phone: Joi.string().required(),
+    title: Joi.string().allow(null),
+    notes: Joi.string().allow('').required(),
+    confirm: Joi.string().allow(null),
+    password: Joi.string().allow(null),
+    modules: Joi.object({
+      users: Joi.boolean().required().default(false),
+      dashboard: Joi.boolean().required().default(false),
+      leads: Joi.boolean().required().default(false),
+      trash: Joi.boolean().required().default(false),
+      offices: Joi.boolean().required().default(false),
+    }).required(),
+  }),
 }
 
 const deleteUser = {

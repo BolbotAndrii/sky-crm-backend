@@ -6,6 +6,7 @@ import * as authService from '../services/auth_service.js'
 import * as tokenService from '../services/token_service.js'
 import * as emailService from '../services/email._service.js'
 import httpStatus from 'http-status'
+import { user_model } from '../models/user_model.js'
 
 const register = catchAsync(async (req: Request, res: Response) => {
   const user = await userService.createUser(req.body)

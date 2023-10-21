@@ -8,6 +8,7 @@ type ValidateFunction = (schema: ObjectSchema<any>) => (req: Request, res: Respo
 
 export const validate: ValidateFunction = (schema) => (req: Request, res: Response, next: NextFunction) => {
   const validSchema = pick(schema, ['params', 'query', 'body']) as ObjectSchema<any>
+
   const object = pick(req, Object.keys(validSchema))
   const { value, error }: ValidationResult<any> = Joi.compile(validSchema)
     .prefs({ errors: { label: 'key' }, abortEarly: false })

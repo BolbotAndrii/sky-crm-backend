@@ -18,19 +18,9 @@ enum UserRoutes {
 
 user_router.post(UserRoutes.CREATE, auth(), validate(createUser), catchAsync(userController.createUser))
 
-user_router.get(UserRoutes.GET_LIST, validate(getUsers), catchAsync(userController.getUsers))
+user_router.get(UserRoutes.GET_LIST, auth(), validate(getUsers), catchAsync(userController.getUsers))
 user_router.get(UserRoutes.GET_USER_BY_ID, validate(getUser), catchAsync(userController.getUser))
 
-user_router.put(
-  UserRoutes.UPDATE,
-  auth(Actions.UPDATE_USER),
-  validate(updateUser),
-  catchAsync(userController.updateUser),
-)
+user_router.put(UserRoutes.UPDATE, auth(), validate(updateUser), catchAsync(userController.updateUser))
 
-user_router.delete(
-  UserRoutes.DELETE,
-  auth(Actions.DELETE_USER),
-  validate(updateUser),
-  catchAsync(userController.deleteUser),
-)
+user_router.delete(UserRoutes.DELETE, auth(), validate(deleteUser), catchAsync(userController.deleteUser))

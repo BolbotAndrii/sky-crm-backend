@@ -137,7 +137,7 @@ const getStatus = async (officeId) => {
 }
 
 const updStatus = async (updateBody) => {
-  console.log(updateBody)
+  
   const updatedStatusReq = await Statuses.findOneAndUpdate(
     { 'office_data.office_id': updateBody.office_data.office_id },
     updateBody,

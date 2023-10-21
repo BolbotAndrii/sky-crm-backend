@@ -46,6 +46,7 @@ export const start = async () => {
       useUnifiedTopology: true,
     } as ConnectOptions)
     console.log('Database connection successful')
+
     app.listen(PORT, () => console.log(`⚡️ Started at port ${PORT}`))
   } catch (e: any) {
     console.log('Server Error', e.message)

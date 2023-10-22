@@ -6,7 +6,9 @@ import { ApiError } from '../utils/ApiError.js'
 import { FilterQuery, Types } from 'mongoose'
 import { STATUS } from '../constants/status.js'
 import { replaceValuesInObject } from '../plugin/utils.js'
+import { geo_model as Geo } from '../models/geo_model.js'
 import moment from 'moment'
+import { makeLeadRequest } from '../utils/makeLeadRequest.js'
 interface PaginationOptions {
   sortBy?: string
   limit?: string
@@ -17,18 +19,27 @@ interface PaginationOptions {
 const createPublickLead = async (leadBody: ILead) => {
   const newStatus = await Status.create({
     lead_id: null,
-    statuses: [{ status: STATUS.NEW }],
+    statuses: [{ status: STATUS.NOT_SEND }],
   })
 
   const newLead = await Lead.create({
     ...leadBody,
     status: newStatus.id,
-    current_status: STATUS.NEW,
+    current_status: STATUS.NOT_SEND,
   })
 
-  newStatus.lead_id = newLead.id
-  await newStatus.save()
+  const { highestPriorityRecord, office, matchingItem } = await Geo.findBestMatch(leadBody.country, leadBody.offer)
 
+  if (!office) {
+    newStatus.lead_id = newLead.id
+    await newStatus.save()
+    return newLead
+  }
+
+  const request = makeLeadRequest(office.integrations, newLead)
+  // const res = await request()
+
+  // console.log(res)
   return newLead
 }
 

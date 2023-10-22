@@ -35,6 +35,54 @@ geos_model.pre('save', async function () {
   }
 })
 
+geos_model.statics.findBestMatch = async function (country, offer) {
+  try {
+    const uppercaseOffer = offer.toLowerCase()
+    const matchingRecords = await this.find({
+      items: {
+        $elemMatch: {
+          country: { $in: country },
+          offer: uppercaseOffer,
+        },
+      },
+    })
+
+    console.log(country, offer, matchingRecords, 'matchingRecordss')
+
+    if (matchingRecords.length === 0) {
+      return {
+        bestMatches: [],
+        office: null,
+        matchingItem: null,
+      }
+    }
+
+    let highestPriorityRecord = matchingRecords[0]
+    for (const record of matchingRecords) {
+      if (record.items[0].priority > highestPriorityRecord.items[0].priority) {
+        highestPriorityRecord = record
+      }
+    }
+
+    const matchingItem = highestPriorityRecord.items.find(
+      (item) => item.country.includes(country) && item.offer === uppercaseOffer,
+    )
+
+    const officeId = highestPriorityRecord.office_id
+
+    const office = await office_model.findById(officeId).populate('geos').populate('statuses').populate('integrations')
+    console.log(office, 'office')
+    return {
+      highestPriorityRecord: highestPriorityRecord,
+      office: office,
+      matchingItem: matchingItem,
+    }
+  } catch (error) {
+    console.error('Произошла ошибка:', error)
+    throw error
+  }
+}
+
 geos_model.plugin(paginate)
 geos_model.plugin(toJSON)
 export const geo_model: Model<Document & IGeo> = model<Document & IGeo>('Geos', geos_model)

@@ -21,7 +21,7 @@ const leadSchema = new Schema<ILead>(
     buyer: { type: String, required: false, default: '' },
     country_code: { type: String, required: false, default: '' },
     account: { type: String, required: false, default: '' },
-    ip: { type: Number, required: false, default: 0 },
+    ip: { type: String, required: false, default: '0.0.0.0' },
     current_status: { type: Number, required: false, default: 1 },
     affilate: { type: Schema.Types.ObjectId, required: false, default: null, ref: 'Office' },
     status: { type: Schema.Types.ObjectId, required: false, default: null, ref: 'Status' },

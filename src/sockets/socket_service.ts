@@ -5,7 +5,7 @@ import helmet from 'helmet'
 import { Server } from 'socket.io'
 import http from 'http'
 
-import { CREATE_PUBLIC_LEAD } from './constants.js'
+import { CREATE_PUBLIC_LEAD, GETTING_LEAD_STATUS } from './constants.js'
 
 config({ quiet: true })
 
@@ -23,6 +23,9 @@ export const start_sockets = async () => {
 
     io.on('connection', function (socket) {
       socket.on(CREATE_PUBLIC_LEAD, (data) => {
+        console.log(data)
+      })
+      socket.on(GETTING_LEAD_STATUS, (data) => {
         console.log(data)
       })
     })

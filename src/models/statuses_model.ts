@@ -10,6 +10,11 @@ const statuses_schema = new Schema<IStatuses>(
       office_id: { type: Schema.Types.ObjectId, required: false, default: null },
       active: { type: Boolean, required: false, default: true },
     },
+    cron_task_data: {
+      office_id: { type: Schema.Types.ObjectId, required: false, default: null },
+      active: { type: Boolean, required: true, default: true },
+      interval: { type: Number, required: false, default: 1 },
+    },
     options: {
       url: { type: String, required: false, default: true },
       method: { type: String, required: false, default: true },
@@ -20,6 +25,7 @@ const statuses_schema = new Schema<IStatuses>(
     response: {
       autologin: { type: String, required: false, default: true },
       ext_status: { type: String, required: false, default: true },
+      lead_id: { type: String, required: false, default: true },
     },
   },
   {

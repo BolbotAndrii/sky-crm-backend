@@ -10,6 +10,11 @@ export interface IStatuses extends Document {
     office_id: Types.ObjectId
     active: boolean
   }
+  cron_task_data: {
+    office_id: Types.ObjectId
+    active: boolean
+    interval: number
+  }
   headers: {}
 
   template: {}

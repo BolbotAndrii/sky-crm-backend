@@ -9,6 +9,7 @@ import { ApiError } from '../utils/ApiError.js'
 import { FilterQuery } from 'mongoose'
 import { replaceValuesInObject } from '../plugin/utils.js'
 import { IGeo } from '../types/geosType.js'
+import { status_cron_task_model as CronTask } from '../models/status_cron_task.js'
 interface PaginationOptions {
   sortBy?: string
   limit?: string
@@ -126,7 +127,15 @@ const removeGeo = async (officeId, geoId) => {
 
 const setStatus = async (body) => {
   const data = new Statuses(body)
+
+  const tast = await new CronTask({
+    office_id: body.office_data.office_id,
+    active: body.cron_task_data.avtive,
+    interval: body.cron_task_data.interval,
+    request_options: data._id,
+  })
   await data.save()
+  await tast.save()
   return data
 }
 
@@ -137,10 +146,19 @@ const getStatus = async (officeId) => {
 }
 
 const updStatus = async (updateBody) => {
-  
   const updatedStatusReq = await Statuses.findOneAndUpdate(
     { 'office_data.office_id': updateBody.office_data.office_id },
     updateBody,
+    { new: true },
+  )
+
+  await CronTask.findOneAndUpdate(
+    { office_id: updateBody.office_data.office_id },
+    {
+      interval: updateBody.cron_task_data.interval,
+      active: updateBody.cron_task_data.active,
+      office_id: updateBody.office_data.office_id,
+    },
     { new: true },
   )
 

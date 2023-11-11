@@ -44,20 +44,22 @@ function transformData(data, keyMapping) {
 }
 
 export const makeStatusRequest = (integration) => {
-  const { headers, options, response } = integration
+  const { headers, options, response, template } = integration
 
   const axiosConfig: AxiosRequestConfig = {
     method: options.method,
     url: options.url,
     headers: { ...headers, 'Content-Type': 'application/json' },
     responseType: 'json',
+    params: template,
   }
 
   return () => {
     io.emit(GETTING_LEAD_STATUS, { message: `Lead status was updated sucessfully for :${options.url} ` })
     console.log(`cron is working for: ${options.url}`)
     axios(axiosConfig)
-      .then((res) => transformData(res, response))
+      .then((res) => transformData(res.data, response))
       .then((res) => console.log(res))
+      .catch(console.log)
   } //need to add logic for update status in BD
 }

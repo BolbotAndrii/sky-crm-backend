@@ -10,7 +10,7 @@ const createPiblickLead = async (req: Request, res: Response) => {
   const lead = await leadService.createPublickLead(req.body)
   if (lead) {
     io.emit(CREATE_PUBLIC_LEAD, lead)
-    return res.status(httpStatus.CREATED).send({ status: true })
+    return res.status(httpStatus.CREATED).send({ status: lead })
   }
   res.status(httpStatus.BAD_REQUEST).send({ status: false })
 }

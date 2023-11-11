@@ -9,6 +9,7 @@ import { replaceValuesInObject } from '../plugin/utils.js'
 import { geo_model as Geo } from '../models/geo_model.js'
 import moment from 'moment'
 import { makeLeadRequest } from '../utils/makeLeadRequest.js'
+import { ext_status_model as ExtStatus } from '../models/ext_status_model.js'
 interface PaginationOptions {
   sortBy?: string
   limit?: string
@@ -16,31 +17,124 @@ interface PaginationOptions {
   populate?: string
 }
 
+function transformData(data, keyMapping) {
+  if (Array.isArray(data)) {
+    const transformedData = {}
+
+    data.forEach((obj) => {
+      for (const key in keyMapping) {
+        const sourceKey = keyMapping[key]
+        if (obj[sourceKey]) {
+          transformedData[key] = obj[sourceKey]
+        }
+      }
+    })
+
+    return transformedData
+  }
+
+  if (typeof data === 'object') {
+    const transformedData = {}
+
+    for (const key in keyMapping) {
+      const sourceKey = keyMapping[key]
+      if (data?.[sourceKey]) {
+        transformedData[key] = data[sourceKey]
+      }
+    }
+
+    for (const key in data) {
+      if (typeof data[key] === 'object' || Array.isArray(data[key])) {
+        transformedData[key] = transformData(data[key], keyMapping)
+      }
+    }
+
+    return transformedData
+  }
+
+  return false
+}
+
 const createPublickLead = async (leadBody: ILead) => {
+  //create default status NOT SEND
+
   const newStatus = await Status.create({
     lead_id: null,
-    statuses: [{ status: STATUS.NOT_SEND }],
+    statuses: [{ status: STATUS.TRASH }],
   })
 
+  //create new Lead with status NOT SEND
   const newLead = await Lead.create({
     ...leadBody,
     status: newStatus.id,
-    current_status: STATUS.NOT_SEND,
+    current_status: STATUS.TRASH,
   })
 
-  const { highestPriorityRecord, office, matchingItem } = await Geo.findBestMatch(leadBody.country, leadBody.offer)
+  const newExtStatus = await ExtStatus.create({
+    lead_id: newLead._id,
+  })
 
-  if (!office) {
-    newStatus.lead_id = newLead.id
+  //if data is invalid - save lead and return with status INVALID DATA
+
+  if (!newLead) {
+    newLead.current_status = STATUS.INVALID_DATA
+    newStatus.statuses.push({ status: STATUS.INVALID_DATA })
+
     await newStatus.save()
+    await newLead.save()
     return newLead
   }
 
-  const request = makeLeadRequest(office.integrations, newLead)
-  // const res = await request()
+  //find ability to send lead to matches office
 
-  // console.log(res)
-  return newLead
+  const { office } = await Geo.findBestMatch(leadBody.country, leadBody.offer)
+
+  //if office not found - save lead and return
+  if (!office) {
+    newStatus.lead_id = newLead.id
+    newLead.current_status = STATUS.NOT_FOUND_OFFICE
+    newStatus.statuses.push({ status: STATUS.NOT_FOUND_OFFICE })
+    await newStatus.save()
+    await newLead.save()
+    return newLead
+  }
+
+  //prepare data for request
+  const request = await makeLeadRequest(office.integrations, newLead)
+
+  //send data to office
+
+  const res = await request()
+
+  //got responce and parce it
+  const parseResponce = transformData(res.data, office.integrations.response)
+
+  //if no responce or responve is invalid - save lead and return
+  if (!parseResponce || !Object.values(parseResponce)?.length) {
+    newStatus.lead_id = newLead.id
+    newLead.current_status = STATUS.NOT_SEND
+    newStatus.statuses.push({ status: STATUS.NOT_SEND })
+    await newStatus.save()
+    await newLead.save()
+    return newLead
+  }
+
+  newStatus.lead_id = newLead.id
+  newLead.current_status = STATUS.SUCCESS
+  newStatus.statuses.push({ status: STATUS.SUCCESS })
+  newExtStatus.office_id = office.id
+  newExtStatus.statuses = [
+    {
+      json: JSON.stringify(res.data),
+      ext_status: parseResponce?.ext_status || '',
+      status: STATUS.SUCCESS,
+    },
+  ]
+  await newExtStatus.save()
+  await newStatus.save()
+  await newLead.save()
+
+  return { ...parseResponce, ...newLead._doc }
 }
 
 const sendLeadToOffice = async (data: object) => {}

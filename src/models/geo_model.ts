@@ -37,17 +37,14 @@ geos_model.pre('save', async function () {
 
 geos_model.statics.findBestMatch = async function (country, offer) {
   try {
-    const uppercaseOffer = offer.toLowerCase()
     const matchingRecords = await this.find({
       items: {
         $elemMatch: {
           country: { $in: country },
-          offer: uppercaseOffer,
+          offer: offer,
         },
       },
     })
-
-    console.log(country, offer, matchingRecords, 'matchingRecordss')
 
     if (matchingRecords.length === 0) {
       return {
@@ -65,13 +62,13 @@ geos_model.statics.findBestMatch = async function (country, offer) {
     }
 
     const matchingItem = highestPriorityRecord.items.find(
-      (item) => item.country.includes(country) && item.offer === uppercaseOffer,
+      (item) => item.country.includes(country) && item.offer === offer,
     )
 
     const officeId = highestPriorityRecord.office_id
 
     const office = await office_model.findById(officeId).populate('geos').populate('statuses').populate('integrations')
-    console.log(office, 'office')
+
     return {
       highestPriorityRecord: highestPriorityRecord,
       office: office,

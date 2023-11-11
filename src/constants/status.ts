@@ -4,4 +4,6 @@ export const STATUS = {
   SUCCESS: 3,
   DUPLICATE: 4,
   NOT_SEND: 5,
+  NOT_FOUND_OFFICE: 6,
+  INVALID_DATA: 7,
 }

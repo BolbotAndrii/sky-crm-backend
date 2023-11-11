@@ -10,6 +10,9 @@ import { FilterQuery } from 'mongoose'
 import { replaceValuesInObject } from '../plugin/utils.js'
 import { IGeo } from '../types/geosType.js'
 import { status_cron_task_model as CronTask } from '../models/status_cron_task.js'
+import { geo_model as Geos } from '../models/geo_model.js'
+import { integration_model as Integrations } from '../models/integration_model.js'
+
 interface PaginationOptions {
   sortBy?: string
   limit?: string
@@ -42,12 +45,27 @@ const updateOfficeById = async (officeId: string, updateBody: Partial<IOffice>) 
   return Office.findByIdAndUpdate(officeId, updateBody, { new: true })
 }
 
-const deleteOfficeById = async (officeId: string) => {
-  const office = await Office.findByIdAndRemove(officeId)
-  if (!office) {
-    throw new ApiError(httpStatus.NOT_FOUND, 'Office not found')
-  } else {
+const deleteOfficeById = async (officeId) => {
+  console.log(officeId)
+  try {
+    const office = await Office.findById(officeId)
+
+    if (!office) {
+      throw new ApiError(httpStatus.NOT_FOUND, 'Office not found')
+    }
+
+    await Promise.all([
+      Geos.deleteMany({ _id: office.geos }),
+      Integrations.deleteMany({ _id: office.integrations }),
+      Statuses.deleteMany({ _id: office.statuses }),
+      CronTask.deleteMany({ office_id: officeId }),
+    ])
+
+    await Office.findByIdAndRemove(officeId)
+
     return { message: 'Office was successfully removed' }
+  } catch (error) {
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, 'Failed to delete office and its related data')
   }
 }
 

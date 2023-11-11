@@ -37,7 +37,7 @@ const updateOffice = async (req: Request, res: Response) => {
 }
 
 const deleteOffice = async (req: Request, res: Response) => {
-  const office = await officeService.deleteOfficeById(req.params.id)
+  const office = await officeService.deleteOfficeById(req.query.id)
   res.status(httpStatus.OK).send(office)
 }
 

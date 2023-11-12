@@ -7,10 +7,10 @@ import { io } from '../sockets/socket_service.js'
 import { CREATE_PUBLIC_LEAD } from '../sockets/constants.js'
 
 const createPiblickLead = async (req: Request, res: Response) => {
-  const lead = await leadService.createPublickLead(req.body)
-  if (lead) {
-    io.emit(CREATE_PUBLIC_LEAD, lead)
-    return res.status(httpStatus.CREATED).send({ status: lead })
+  const resp = await leadService.createPublickLead(req.body)
+  if (resp?.lead) {
+    io.emit(CREATE_PUBLIC_LEAD, resp?.lead)
+    return res.status(httpStatus.CREATED).send(resp?.responce)
   }
   res.status(httpStatus.BAD_REQUEST).send({ status: false })
 }

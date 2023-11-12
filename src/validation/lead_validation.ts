@@ -11,7 +11,7 @@ const createLead = {
     lead_password: Joi.string().allow(null),
     offer: Joi.string().required(),
     country: Joi.string().required(),
-
+    affiliate: Joi.string().allow(null),
     language: Joi.string().allow(null),
     geo: Joi.string().allow(null),
     domain: Joi.string().allow(null),

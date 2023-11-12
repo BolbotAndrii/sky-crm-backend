@@ -17,10 +17,7 @@ const integrations_model = new Schema<IIntegration>(
     },
     headers: { type: Object, required: false },
     template: { type: Object, required: false },
-    response: {
-      autologin: { type: String, required: false, default: true },
-      ext_status: { type: String, required: false, default: true },
-    },
+    response: { type: Object, required: false },
   },
   {
     timestamps: {

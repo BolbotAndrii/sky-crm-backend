@@ -48,9 +48,7 @@ geos_model.statics.findBestMatch = async function (country, offer) {
 
     if (matchingRecords.length === 0) {
       return {
-        bestMatches: [],
         office: null,
-        matchingItem: null,
       }
     }
 
@@ -61,19 +59,11 @@ geos_model.statics.findBestMatch = async function (country, offer) {
       }
     }
 
-    const matchingItem = highestPriorityRecord.items.find(
-      (item) => item.country.includes(country) && item.offer === offer,
-    )
-
     const officeId = highestPriorityRecord.office_id
 
     const office = await office_model.findById(officeId).populate('geos').populate('statuses').populate('integrations')
 
-    return {
-      highestPriorityRecord: highestPriorityRecord,
-      office: office,
-      matchingItem: matchingItem,
-    }
+    return { office }
   } catch (error) {
     console.error('Произошла ошибка:', error)
     throw error

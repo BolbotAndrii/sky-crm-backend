@@ -6,6 +6,7 @@ import { toJSON } from '../plugin/toJSON.js'
 const offices_model = new Schema<IOffice>(
   {
     title: { type: String, required: false, default: '' },
+    status: { type: Number, required: false, default: 1 },
     description: { type: String, required: false, default: '' },
     geos: { type: Schema.Types.ObjectId, ref: 'Geos', required: false, default: null },
     integrations: { type: Schema.Types.ObjectId, ref: 'Integrations', required: false, default: null },

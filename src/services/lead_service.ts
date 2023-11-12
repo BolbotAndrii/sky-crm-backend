@@ -55,6 +55,30 @@ function transformData(data, keyMapping) {
   return false
 }
 
+function extractKeys(data, keysToReplace, result = {}) {
+  if (Array.isArray(data)) {
+    data.forEach((item) => extractKeys(item, keysToReplace, result))
+  } else if (typeof data === 'object' && data !== null) {
+    for (let key in data) {
+      if (data.hasOwnProperty(key)) {
+        if (typeof data[key] !== 'object' && data[key]) {
+          result[key] = data[key]
+        } else {
+          extractKeys(data[key], keysToReplace, result)
+        }
+      }
+    }
+  }
+
+  const responceKeys = {}
+
+  for (let key in keysToReplace) {
+    responceKeys[key] = result[keysToReplace[key]]
+  }
+
+  return responceKeys
+}
+
 const createPublickLead = async (leadBody: ILead) => {
   //create default status NOT SEND
 
@@ -82,7 +106,7 @@ const createPublickLead = async (leadBody: ILead) => {
 
     await newStatus.save()
     await newLead.save()
-    return newLead
+    return { lead: newLead, responce: { status: false, message: 'Not Send' } }
   }
 
   //find ability to send lead to matches office
@@ -96,7 +120,7 @@ const createPublickLead = async (leadBody: ILead) => {
     newStatus.statuses.push({ status: STATUS.NOT_FOUND_OFFICE })
     await newStatus.save()
     await newLead.save()
-    return newLead
+    return { lead: newLead, responce: { status: false, message: 'Not Send' } }
   }
 
   //prepare data for request
@@ -107,7 +131,7 @@ const createPublickLead = async (leadBody: ILead) => {
   const res = await request()
 
   //got responce and parce it
-  const parseResponce = transformData(res.data, office.integrations.response)
+  const parseResponce = extractKeys(res?.data, office.integrations.response)
 
   //if no responce or responve is invalid - save lead and return
   if (!parseResponce || !Object.values(parseResponce)?.length) {
@@ -116,7 +140,7 @@ const createPublickLead = async (leadBody: ILead) => {
     newStatus.statuses.push({ status: STATUS.NOT_SEND })
     await newStatus.save()
     await newLead.save()
-    return newLead
+    return { lead: newLead, responce: { status: false, message: 'Not Send' } }
   }
 
   newStatus.lead_id = newLead.id
@@ -134,7 +158,9 @@ const createPublickLead = async (leadBody: ILead) => {
   await newStatus.save()
   await newLead.save()
 
-  return { ...parseResponce, ...newLead._doc }
+  console.log(res?.data, parseResponce)
+
+  return { lead: newLead, responce: { ...parseResponce, data: res?.data?.data } }
 }
 
 const sendLeadToOffice = async (data: object) => {}

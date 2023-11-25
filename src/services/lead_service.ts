@@ -120,7 +120,7 @@ const createPublickLead = async (leadBody: ILead) => {
     newStatus.statuses.push({ status: STATUS.NOT_FOUND_OFFICE })
     await newStatus.save()
     await newLead.save()
-    return { lead: newLead, responce: { status: false, message: 'Not Send' } }
+    return { lead: newLead, responce: { status: false, message: 'Office not found' } }
   }
 
   //prepare data for request
@@ -132,6 +132,8 @@ const createPublickLead = async (leadBody: ILead) => {
 
   //got responce and parce it
   const parseResponce = extractKeys(res?.data, office.integrations.response)
+
+  console.log(parseResponce)
 
   //if no responce or responve is invalid - save lead and return
   if (!parseResponce || !Object.values(parseResponce)?.length) {
@@ -157,8 +159,6 @@ const createPublickLead = async (leadBody: ILead) => {
   await newExtStatus.save()
   await newStatus.save()
   await newLead.save()
-
-  console.log(res?.data, parseResponce)
 
   return { lead: newLead, responce: { ...parseResponce, data: res?.data?.data } }
 }

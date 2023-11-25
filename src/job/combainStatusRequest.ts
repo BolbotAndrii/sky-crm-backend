@@ -11,6 +11,7 @@ export const makeRequest = async () => {
     activeTask.forEach((task) => {
       const request = makeStatusRequest(task.request_options)
       const putToQueue = createCronTask(task.interval, request)
+
       putToQueue.start()
     })
   } catch (error) {

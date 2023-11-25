@@ -16,6 +16,8 @@ export interface IStatuses extends Document {
     interval: number
   }
   headers: {}
+  date_interval: number
+  date_format: string
 
   template: {}
   response: {

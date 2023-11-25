@@ -20,13 +20,11 @@ const statuses_schema = new Schema<IStatuses>(
       method: { type: String, required: false, default: true },
       content_type: { type: String, required: false, default: true },
     },
+    date_interval: { type: Number, required: false },
+    date_format: { type: String, required: false },
     headers: { type: Object, required: false },
     template: { type: Object, required: false },
-    response: {
-      autologin: { type: String, required: false, default: true },
-      ext_status: { type: String, required: false, default: true },
-      lead_id: { type: String, required: false, default: true },
-    },
+    response: { type: Object, required: false },
   },
   {
     timestamps: {

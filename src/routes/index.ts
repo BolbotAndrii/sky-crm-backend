@@ -2,6 +2,7 @@ import { user_router } from './user_router.js'
 import { auth_router } from './auth_router.js'
 import { lead_router } from './lead_router.js'
 import { office_router } from './office_router.js'
+import { analytics_router } from './analytics_router.js'
 
 import { RequestHandler, Router } from 'express'
 
@@ -10,6 +11,7 @@ enum PathEnum {
   USER = '/user',
   OFFICE = '/office',
   LEAD = '/lead',
+  ANALYTICS = '/dashboard',
 }
 
 interface IRoutes {
@@ -35,6 +37,10 @@ const routes: IRoutes[] = [
   {
     path: PathEnum.LEAD,
     route: lead_router,
+  },
+  {
+    path: PathEnum.ANALYTICS,
+    route: analytics_router,
   },
 ]
 

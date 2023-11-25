@@ -18,6 +18,9 @@ export interface IStatuses extends Document {
   headers: {}
 
   template: {}
+
+  date_format: string
+  date_interval: string
   response: {
     autologin: string
     ext_status: string

@@ -22,6 +22,8 @@ const statuses_schema = new Schema<IStatuses>(
     },
     headers: { type: Object, required: false },
     template: { type: Object, required: false },
+    date_format: { type: String, require: false },
+    date_interval: { type: String, require: false },
     response: {
       autologin: { type: String, required: false, default: true },
       ext_status: { type: String, required: false, default: true },

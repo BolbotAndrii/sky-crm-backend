@@ -8,6 +8,6 @@ import { makeRequest } from './combainStatusRequest.js'
 // })
 
 export const initJob = () => {
-  // makeRequest()
+  makeRequest()
   // gettingLeadStatus.start()
 }

@@ -8,6 +8,14 @@ const statusSchema = new Schema<IStatus>(
   {
     office_id: { type: Schema.Types.ObjectId, required: false, default: null },
     lead_id: { type: Schema.Types.ObjectId, required: false, default: null },
+    external_statuses: [
+      {
+        status: { type: Schema.Types.Mixed, required: true, default: '' },
+        json: { type: String, required: false },
+        id: { type: String, required: true, default: () => new Types.ObjectId().toString() },
+        created_at: { type: Date, default: Date.now },
+      },
+    ],
     statuses: [
       {
         status: { type: Number, required: true, default: STATUS.NEW },
